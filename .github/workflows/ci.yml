@@ -14,10 +14,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Check if PR is in sync with main
         run: |
-          if git merge-base --is-ancestor origin/main @
+          git fetch origin main
+          if git merge-base --is-ancestor origin/main @;
           then
             echo "Your branch is up to date."
             exit 0
