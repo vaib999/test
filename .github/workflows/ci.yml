@@ -17,6 +17,8 @@ jobs:
         run: |
           git branch
           git fetch origin main
+          echo $(git rev-parse HEAD)
+          echo $(git rev-parse origin/main)
           if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
             echo "PR is behind main. Please rebase your branch."
             exit 1
