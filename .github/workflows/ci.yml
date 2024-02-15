@@ -13,7 +13,7 @@ jobs:
 
       - name: Check if branch is in sync with main
         run: |
-          # git checkout origin/test1
+          git checkout origin/test2
           git fetch origin
           echo "><><>>><><>>>"
           git branch
