@@ -15,25 +15,11 @@ jobs:
         run: |
           # git checkout origin/test1
           git fetch origin main
-          echo "><><>>><><>>>"
-          git branch
-          echo "><><>>><><>>>"
-          git log HEAD..origin/main --oneline
-          echo "><><>>><><>>>"
-          git log origin/main..HEAD --oneline
-          echo "><><>>><><>>>"
-          # Check if the PR is behind the main branch
-          if [ -n "$(git log HEAD..origin/main --oneline)" ] && [ -n "$(git log origin/main..HEAD --oneline)" ]; then
-            echo "local is ahead of remote and vice versa"
-            echo "PR is not in sync with main. Please update your branch."
-            exit 1
-          fi
-          if [ -n "$(git log HEAD..origin/main --oneline)" ]; then
-            echo "Remote is ahead of local"
-            echo "PR is not in sync with main. Please update your branch."
-            exit 1
-          fi
-          if [ -n "$(git log origin/main..HEAD --oneline)" ]; then
-            echo "PR is in sync with main."
+          if git merge-base --is-ancestor origin/main @
+          then
+            echo "Your branch is up to date."
             exit 0
+          else
+            echo "You need to merge / rebase."
+            exit 1
           fi
