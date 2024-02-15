@@ -1,25 +1,30 @@
-name: Up-to-Date Check
+name: Sync Check
 
-on:
-  pull_request
+on: pull_request
 
 jobs:
-  up-to-date-check:
+  check-sync:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: Check if PR is up to date with main
+      - name: Check if branch is in sync with main
         run: |
-          git branch
-          git fetch origin main
-          echo $(git rev-parse HEAD)
-          echo $(git rev-parse origin/main)
-          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
-            echo "PR is behind main. Please rebase your branch."
+          # Check if the PR is behind the main branch
+          if [ [ -n "$(git log HEAD..origin/main --oneline)" ] && [ -n "$(git log origin/main..HEAD --oneline)" ] ]; then
+            echo "local is ahead of remote and vice versa"
+            echo "PR is not in sync with main. Please update your branch."
             exit 1
+          fi
+          if [ -n "$(git log HEAD..origin/main --oneline)" ]; then
+            echo "Remote is ahead of local"
+            echo "PR is not in sync with main. Please update your branch."
+            exit 1
+          fi
+          if [ -n "$(git log origin/main..HEAD --oneline)" ]; then
+            echo "PR is in sync with main."
+            exit 0
           fi
