@@ -14,7 +14,7 @@ jobs:
       - name: Check if branch is in sync with main
         run: |
           # git checkout origin/test1
-          git fetch origin
+          git fetch origin main
           echo "><><>>><><>>>"
           git branch
           echo "><><>>><><>>>"
