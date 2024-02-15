@@ -15,7 +15,7 @@ jobs:
         run: |
           # git checkout origin/test1
           git fetch origin main
-          if git merge-base --is-ancestor main @
+          if git merge-base --is-ancestor origin/main @
           then
             echo "Your branch is up to date."
             exit 0
